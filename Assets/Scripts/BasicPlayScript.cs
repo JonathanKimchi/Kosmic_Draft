@@ -3,10 +3,10 @@
 public class BasicPlayScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    public StoreTransform[] targets;
+    public StoreTransform[] targets;//stores unfiltered frames.
     public int targetTotalLength=0;
-    public StoreTransform[] keyFrames;
-    public int targetTracker = 0;
+    public StoreTransform[] keyFrames;//stores keyframes.  
+    public int targetTracker = 0;//marks current place in playing iteration.
     public float initTime = 0;//initial time.  will always start at 0.
     public float finalTime = 0;//finalTime for the next keyFrame.  keyFrames[n+1].keySeconds - 
                                //keyFrames[n].keySeconds;
@@ -52,14 +52,14 @@ public class BasicPlayScript : MonoBehaviour
      * finalTime doesn't change till the loop ends.  
      * That may cause some slowdowns, but that is still to be determined.  
      * 
-     * precondiion- keyframeTracker<keyFrames.length-1.  The timeline has to have at least two keyframes
+     * precondition- keyframeTracker<keyFrames.length-1.  The timeline has to have at least two keyframes
      * for an animation to occur.  
      * 
      *(this animation script will probably need to be rewritten to account for deadspace.  A new
      * keyframe can automatically be added at the end of an animation that copies that locrot of 
      * the previous keyframe.
      *  Just realized that this animation isn't going to work all that well with BVHExporter due to
-     *  extraneous keyframes.  That's okay--I'm sure thhere is a way to filter out those tings 
+     *  extraneous keyframes.  That's okay--I'm sure there is a way to filter out those things 
      *  later on.
      *  
      */
