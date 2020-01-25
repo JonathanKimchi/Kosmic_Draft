@@ -86,6 +86,7 @@ public class SerialAdd : MonoBehaviour
         rotY = this.transform.rotation.y;
         rotZ = this.transform.rotation.z;
         currentTime = storageObject.currentTime;
+        GameObject baseLoc = GameObject.Find("BodyBase");//change this later to adapt to dynamic targeting
         StoreTransform currentTransform = new StoreTransform
         {
             /*currentTransform.posX = posX;
@@ -95,7 +96,8 @@ public class SerialAdd : MonoBehaviour
             currentTransform.rotY = rotY;
             currentTransform.rotZ = rotZ;*/
             storeFrame = currentTime,
-            position = gameObject.transform.localPosition
+            //position = gameObject.transform.localPosition
+            position = baseLoc.transform.InverseTransformPoint(transform.position)
         };
         currentTransform.rotation = gameObject.transform.localRotation;
         currentTransform.localScale = gameObject.transform.localScale;
