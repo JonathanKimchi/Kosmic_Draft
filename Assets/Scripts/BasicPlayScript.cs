@@ -4,7 +4,7 @@ public class BasicPlayScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public StoreTransform[] targets;//stores unfiltered frames.
-    public int targetTotalLength=0;
+    public int targetTotalLength = 0;
     public StoreTransform[] keyFrames;//stores keyframes.  
     public int targetTracker = 0;//marks current place in playing iteration.
     public float initTime = 0;//initial time.  will always start at 0.
@@ -14,8 +14,6 @@ public class BasicPlayScript : MonoBehaviour
     public int keyTracker = 0;//tracks which key the iter is on.  should never be >= keyframes.lenggth-2
     public int playState = 0;
     public BVHRecorder recorder;
-
-    public SerialStore storageObject;
 
     public void FilterTargets()
     {
@@ -69,8 +67,6 @@ public class BasicPlayScript : MonoBehaviour
     {
         GameObject temp = GameObject.Find("Save");
         recorder = temp.GetComponent<BVHRecorder>();
-        GameObject temp2 = GameObject.Find("StoreObject");
-        storageObject = temp2.GetComponent<SerialStore>();
     }
     //public void calculateCurve(
     /*public float CalcFrameLength(int fps)
@@ -92,7 +88,7 @@ public class BasicPlayScript : MonoBehaviour
         FilterTargets();
         //recorder.capturing = true;
         playState = 1;
-        
+
     }
     public void RecordStart()
     {
@@ -103,7 +99,7 @@ public class BasicPlayScript : MonoBehaviour
         playState = 1;
 
     }
-    public void PositionUpdate(int currentTime,int maxKeyFrame)
+    public void PositionUpdate(int currentTime, int maxKeyFrame)
     {
         StoreTransform position1 = new StoreTransform();
         StoreTransform position2 = new StoreTransform();
@@ -122,7 +118,7 @@ public class BasicPlayScript : MonoBehaviour
             if (targets[i] != null)
             {
                 position2 = targets[i];
-                i = maxKeyFrame+2;
+                i = maxKeyFrame + 2;
             }
         }
         if (position1 == null)
@@ -135,25 +131,20 @@ public class BasicPlayScript : MonoBehaviour
         }
         // position1 = targets[0];
         float endingFrames = position2.storeFrame - position1.storeFrame;
-        float lerpRatio = (currentTime - position1.storeFrame)/endingFrames;
+        float lerpRatio = (currentTime - position1.storeFrame) / endingFrames;
         //float lerpRatio = (float)(position1.current)
-        GameObject baseLoc = GameObject.Find("BodyBase");
-        transform.position = Vector3.Lerp(baseLoc.transform.TransformPoint(position1.position), baseLoc.transform.TransformPoint(position2.position), lerpRatio);
-        //need to add rotation later.  
-        //transform.localRotation = Quaternion.Lerp(keyFrames[keyTracker].rotation, keyFrames[keyTracker + 1].rotation, lerpRatio);
-        //transform.localPosition = Vector3.Lerp(position1.position, position2.position, lerpRatio);
+        transform.localPosition = Vector3.Lerp(position1.position, position2.position, lerpRatio);
     }
     void Update()
     {
         if (playState != 0)
         {
-            if (storageObject.currentTime>=storageObject.maxKeyFrame)//change to maxKeyframe soon.  
+            if (keyTracker >= keyFrames.Length - 1)
             {
-                
-                //keyTracker = 0;//Tracks what keyframe the animation is currently on.  
-                //finalTime = 0;//time of the last Keyframe-first keyframe.
+                keyTracker = 0;//Tracks what keyframe the animation is currently on.  Lag test for this new keyboard.  
+                finalTime = 0;//time of the last Keyframe-first keyframe.
                 initTime = 0;//Zero.
-                playState = 0;//tracks playstate
+                playState = 0;
                 if (recorder.capturing == true)
                 {
                     //recorder.saveBVH();
@@ -161,28 +152,35 @@ public class BasicPlayScript : MonoBehaviour
                     recorder.saveBVH();
 
                 }
-                storageObject.currentTime = 0;
                 //recorder.capturing = false;
             }
             else
             {
                 if (finalTime == 0)
                 {
-                    finalTime = (float)(storageObject.keySecond);//tracks the value of a keysecond.
+                    finalTime = (float)(keyFrames[keyTracker + 1].keySecond - keyFrames[keyTracker].keySecond);
                     //recorder.capturing = true;
 
                 }
                 initTime += Time.deltaTime;
-                if (initTime >= finalTime)//inittime tracks how much time has passed.
+                if (initTime >= finalTime)
                 {
-                    initTime = 0;
-                    storageObject.currentTime++;
+                    initTime = finalTime;
                 }
-                
-                
+                float lerpRatio = initTime / finalTime;
+                GameObject baseLoc = GameObject.Find("BodyBase");
+                transform.position = Vector3.Lerp(baseLoc.transform.TransformPoint(keyFrames[keyTracker].position), baseLoc.transform.TransformPoint(keyFrames[keyTracker + 1].position), lerpRatio);
+                transform.localRotation = Quaternion.Lerp(keyFrames[keyTracker].rotation, keyFrames[keyTracker + 1].rotation, lerpRatio);
                 //transform.localPosition = Vector3.Lerp(keyFrames[keyTracker].position, keyFrames[keyTracker + 1].position, lerpRatio);
                 //transform.localRotation = Quaternion.Lerp(keyFrames[keyTracker].rotation, keyFrames[keyTracker + 1].rotation, lerpRatio);
                 //transform.
+                if (lerpRatio == 1)
+                {
+                    //playState = 0;
+                    finalTime = 0;
+                    initTime = 0;
+                    keyTracker++;//this keyTracker will allow iter to continue in order.
+                }
             }
         }
     }
