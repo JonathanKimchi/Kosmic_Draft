@@ -11,8 +11,9 @@ public class SerialStore : MonoBehaviour
     int inputTracker = 0;
     public int currentTime = 0;
     int previousTime = 0;
-    int maxTime = 0;//tells the Max time allowed.
+    int maxTime = 0;//tells the Max time allowed.  Not implemented yet, since we don't have a UI.
     int maxKeyFrame = 0;//tells max keyframe put in up to this point.  Used to allow scrubbing.  
+    public int fps = 24;//sets the global framerate for animations.  Not fully implemented yet.
     void Start()
     {
         
@@ -64,6 +65,20 @@ public class SerialStore : MonoBehaviour
         for (int i = 0; i < inputTracker; i++)
         {
             inputStorage[i].GetComponent<BasicPlayScript>().RecordStart();
+        }
+    }
+    public void LiveRecord()
+    {
+        for (int i = 0; i < inputTracker; i++)
+        {
+            inputStorage[i].GetComponent<SerialAdd>().LiveRecord();
+        }
+    }
+    public void LiveRecordStop()
+    {
+        for (int i = 0; i < inputTracker; i++)
+        {
+            inputStorage[i].GetComponent<SerialAdd>().LiveStop();
         }
     }
     public void Rewind()

@@ -14,18 +14,22 @@ public class StoreTransform //: MonoBehaviour
     public int storeFrame;//Stores the frame of the Keyframe.
     //public Transform transforming;
     public Vector3 position;
+    public Vector3 positionToBase;//records the distance from the base object.  
     public Quaternion rotation;
     public Vector3 localScale;
     public float keySecond;
     public int fps = 24;
-
-
     public StoreTransform()
     {
-
+        GameObject temp = GameObject.Find("StoreObject");
+        SerialStore tempor = temp.GetComponent<SerialStore>();
+        fps = tempor.fps;
     }
     public void convertFrame()
     {
+        GameObject temp = GameObject.Find("StoreObject");
+        SerialStore tempor = temp.GetComponent<SerialStore>();
+        fps = tempor.fps;
         keySecond = (float)storeFrame / fps;
     }
 

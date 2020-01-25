@@ -141,9 +141,9 @@ public class BasicPlayScript : MonoBehaviour
         {
             if (keyTracker >= keyFrames.Length - 1)
             {
-                keyTracker = 0;
-                finalTime = 0;
-                initTime = 0;
+                keyTracker = 0;//Tracks what keyframe the animation is currently on.  Lag test for this new keyboard.  
+                finalTime = 0;//time of the last Keyframe-first keyframe.
+                initTime = 0;//Zero.
                 playState = 0;
                 if (recorder.capturing == true)
                 {
@@ -168,8 +168,12 @@ public class BasicPlayScript : MonoBehaviour
                     initTime = finalTime;
                 }
                 float lerpRatio = initTime / finalTime;
-                transform.localPosition = Vector3.Lerp(keyFrames[keyTracker].position, keyFrames[keyTracker + 1].position, lerpRatio);
+                GameObject baseLoc = GameObject.Find("BodyBase");
+                transform.position = Vector3.Lerp(baseLoc.transform.TransformPoint(keyFrames[keyTracker].position), baseLoc.transform.TransformPoint(keyFrames[keyTracker+1].position), lerpRatio);
                 transform.localRotation = Quaternion.Lerp(keyFrames[keyTracker].rotation, keyFrames[keyTracker + 1].rotation, lerpRatio);
+                //transform.localPosition = Vector3.Lerp(keyFrames[keyTracker].position, keyFrames[keyTracker + 1].position, lerpRatio);
+                //transform.localRotation = Quaternion.Lerp(keyFrames[keyTracker].rotation, keyFrames[keyTracker + 1].rotation, lerpRatio);
+                //transform.
                 if (lerpRatio == 1)
                 {
                     //playState = 0;
