@@ -136,7 +136,7 @@ public class SerialAdd : MonoBehaviour
         //float distanceTemp = Vector3.Distance(baseLoc.transform.position, transform.position);
         //Vector3 directionTemp = baseLoc.transform.InverseTransformDirection(transform.position);
         //currentTransform.position = directionTemp * distanceTemp;
-        currentTransform.rotation = gameObject.transform.localRotation;
+        //currentTransform.rotation = gameObject.transform.localRotation;
         currentTransform.localScale = gameObject.transform.localScale;
         currentTransform.convertFrame();
         transformStorage[input1] = currentTransform;

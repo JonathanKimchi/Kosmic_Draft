@@ -12,11 +12,13 @@ public class SerialStore : MonoBehaviour
     public int currentTime = 0;
     int previousTime = 0;
     int maxTime = 0;//tells the Max time allowed.  Not implemented yet, since we don't have a UI.
-    int maxKeyFrame = 0;//tells max keyframe put in up to this point.  Used to allow scrubbing.  
+    public int maxKeyFrame = 0;//tells max keyframe put in up to this point.  Used to allow scrubbing.  
     public int fps = 24;//sets the global framerate for animations.  Not fully implemented yet.
+    public float keySecond = 0;//tracks how long a keyframe lasts
+
     void Start()
     {
-        
+        keySecond = 1 / fps;
     }
 
     // Update is called once per frame
