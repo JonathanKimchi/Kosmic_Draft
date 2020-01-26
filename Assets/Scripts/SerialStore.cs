@@ -2,7 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
+ * Jonathan Kim
+ * SerialStore
+ * 
+ * Purpose: This is one of the most important, yet simple coding blocks.  This stores all the GameObjects, which contain the location, rotation, and scaling data for every keyframe.  The Gameobjects are stored here in an
+ * array at initialization.  The array is iterated through whenever code needs to be executed, whether it be BasicPlayScript,SerialAdd, or something else.  
+ * 
+ * It stores the 
+ */
 public class SerialStore : MonoBehaviour
 {
     // Start is called before the first frame update

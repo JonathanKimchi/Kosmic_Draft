@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ * Jonathan Kim
+ * Serial Add
+ * 
+ * 
+ * Purpose: This code is appended on all the targets(grabbable anchor points) on a given model.  It tracks the position, rotation, and scaling data for every target.  The data is then called upon by SerialStore.  
+ * 
+ */
 public class SerialAdd : MonoBehaviour
 {
-    // Start is called before the first frame update.  Not sure if this is called upon object initialization or not.
-    public SerialStore storageObject;
+    
+    public SerialStore storageObject;//Used to reference the storeObject.
     public float posX;
     public float posY;
     public float posZ;
-    //public Transform TemporaryStorageTest;
     public float rotX;
     public float rotY;
     public float rotZ;
@@ -17,10 +23,10 @@ public class SerialAdd : MonoBehaviour
     public float posYOld;
     public float posZOld;
     public float rotXOld;
-    public float rotYOld;//All of these variables are not yet being used.  They will be used once Serialization is implemented.
+    public float rotYOld;//All of these variables(pos,rot) are not yet being used.  They will be used once Serialization is implemented.
     public float rotZOld;//stores the old location, rotation of current object.  Helpful for Keyframing.
     public int currentTime;
-    public StoreTransform[] transformStorage = new StoreTransform[10000];
+    public StoreTransform[] transformStorage = new StoreTransform[10000];//stores all the transform positions on a timeline.  The current time is used as an index.  
     public int recordState = 0;
     public float keyTime;//The amount of time it takes for one frame to pass.
     public float passedTime;//Records how much time has passed since the last time a frame was recorded.  
@@ -52,10 +58,10 @@ public class SerialAdd : MonoBehaviour
             }
         }
     }
-    public void LiveRecord()
+    public void LiveRecord()//starts live recording(motion capture, essentially)
     {
         keyTime = 1 / storageObject.fps;
-        recorder.capturing = true;
+        recorder.capturing = true;//uses a BVHRecorder, allowing BVHs to be exported.  
         recordState = 1;
     }
     public void LiveStop()
@@ -78,23 +84,17 @@ public class SerialAdd : MonoBehaviour
     }
     public void SaveLocRot()
     {
-        //StoreTransform currentLocation = new StoreTransform();
-        posX = this.transform.position.x;
+        
+        /*posX = this.transform.position.x;
         posY = this.transform.position.y;
         posZ = this.transform.position.z;
         rotX = this.transform.rotation.x;
         rotY = this.transform.rotation.y;
-        rotZ = this.transform.rotation.z;
+        rotZ = this.transform.rotation.z;*/
         currentTime = storageObject.currentTime;
         GameObject baseLoc = GameObject.Find("BodyBase");//change this later to adapt to dynamic targeting
         StoreTransform currentTransform = new StoreTransform
         {
-            /*currentTransform.posX = posX;
-            currentTransform.posY = posY;
-            currentTransform.posZ = posZ;
-            currentTransform.rotX = rotX;
-            currentTransform.rotY = rotY;
-            currentTransform.rotZ = rotZ;*/
             storeFrame = currentTime,
             //position = gameObject.transform.localPosition
             position = baseLoc.transform.InverseTransformPoint(transform.position)

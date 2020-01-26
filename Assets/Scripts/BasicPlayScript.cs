@@ -1,5 +1,11 @@
 ﻿using UnityEngine;
-
+/*
+ * Jonathan Kim
+ * BasicPlayScript
+ * 
+ * Purpose: This code acts to replay the location data stored in the SerialStore script.  It is called upon by the SerialStore script when the Playback button is pressed.
+ * 
+ */
 public class BasicPlayScript : MonoBehaviour
 {
     // Start is called before the first frame update
